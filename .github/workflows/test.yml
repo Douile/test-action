@@ -5,5 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     name: Test
     steps:
-    - name: test:
+    - name: test
       uses: ./
