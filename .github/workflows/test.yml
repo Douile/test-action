@@ -1,0 +1,9 @@
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+    - name: test:
+      uses: ./
