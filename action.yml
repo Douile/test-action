@@ -1,0 +1,44 @@
+name: 'Rust Release binary (test)'
+description: 'Automate publishing Rust build artifacts for GitHub releases through GitHub Actions'
+branding:
+  icon: 'box'
+  color: 'orange'
+inputs:
+  RUSTTARGET:
+    description: 'Output target'
+    required: true
+  EXTRA_FILES:
+    description: 'List of extra files to include in build'
+    required: false
+  SRC_DIR:
+    description: 'Path to directory containing Cargo.toml (defaults to project root)'
+    required: false
+  ARCHIVE_TYPES:
+    description: 'List of archive types to publish the binaries with, default "zip", supports zip and all tar formats'
+    required: false
+  ARCHIVE_NAME:
+    description: 'Full name of archive to upload (you must specify file extension and change this if building multiple targets)'
+    required: false
+  PRE_BUILD:
+    description: 'Relative path of script to run before building'
+    required: false
+  POST_BUILD:
+    description: 'Relative path of script to run after building'
+    required: false
+  MINIFY:
+    description: 'If set to "true", the resulting binary will be stripped and compressed by UPX. ("false" by default)'
+    required: false
+  TOOLCHAIN_VERSION:
+    description: 'The rust toolchain version to use (see https://rust-lang.github.io/rustup/concepts/toolchains.html#toolchain-specification)'
+    required: false
+  UPLOAD_MODE:
+    description: 'What method to use to upload compiled binaries, supported values: (release, none), default: release'
+    require: false
+outputs:
+  BUILT_ARCHIVE:
+    description: 'Relative path to the archive containing compiled program'
+  BUILT_CHECKSUM:
+    description: 'Relative path to the checksum of the archive'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
