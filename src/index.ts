@@ -24,6 +24,7 @@ function groupWrap(name: string, func: () => Promise<void>): () => Promise<void>
 const installRustup = groupWrap("install toolchain", async () => {
   await tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
   await exec('bash', ['rustup.sh']);
+  await tc.cacheDir("~/.rustup", "rustup", "0");
 });
 
 async function run() {
