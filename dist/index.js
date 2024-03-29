@@ -28568,8 +28568,12 @@ function groupWrap(name, func) {
 }
 const installRustup = groupWrap("install toolchain", async () => {
     await tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
-    const rustupVersion = await (0, exec_1.getExecOutput)("bash", ["rustup.sh", "--version"]);
     await (0, exec_1.exec)("bash", ["rustup.sh", "-y"]);
+    const rustupVersion = await (0, exec_1.getExecOutput)("bash", [
+        "rustup.sh",
+        "-y",
+        "--version",
+    ]);
     await tc.cacheDir("/home/runner/.rustup", "rustup", rustupVersion.stdout);
 });
 const installCross = groupWrap("install cross", async () => {
