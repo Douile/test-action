@@ -40,5 +40,5 @@ outputs:
   BUILT_CHECKSUM:
     description: 'Relative path to the checksum of the archive'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
