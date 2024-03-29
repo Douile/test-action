@@ -28544,15 +28544,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const exec_1 = __nccwpck_require__(1514);
@@ -28565,29 +28556,27 @@ const image = "ghcr.io/cross-rs/aarch64-unknown-linux-gnu:latest";
  * @returns Void promise.
  */
 function groupWrap(name, func) {
-    return function () {
-        return __awaiter(this, void 0, void 0, function* () {
-            core.startGroup(name);
-            try {
-                yield func();
-            }
-            finally {
-                core.endGroup();
-            }
-        });
+    return async function () {
+        core.startGroup(name);
+        try {
+            await func();
+        }
+        finally {
+            core.endGroup();
+        }
     };
 }
-const installRustup = groupWrap("install toolchain", () => __awaiter(void 0, void 0, void 0, function* () {
-    yield tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
-    yield (0, exec_1.exec)("bash", ["rustup.sh", "-y"]);
-    yield tc.cacheDir("~/.rustup", "rustup", "0");
-}));
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield installRustup();
-        yield (0, exec_1.exec)("docker", ["pull", image]);
-        yield (0, exec_1.exec)("docker", ["run", "--rm", image]);
-    });
+const installRustup = groupWrap("install toolchain", async () => {
+    await tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
+    await (0, exec_1.exec)("bash", ["rustup.sh", "-y"]);
+    await (0, exec_1.exec)("cargo", ["install", "cross"]);
+    await tc.cacheDir("/home/runner/.rustup", "rustup", "0");
+    await tc.cacheDir("/home/runner/.cargo", "cargo", "0");
+});
+async function run() {
+    await installRustup();
+    await (0, exec_1.exec)("docker", ["pull", image]);
+    await (0, exec_1.exec)("docker", ["run", "--rm", image]);
 }
 run().then(null, (error) => core.setFailed(error.message));
 
