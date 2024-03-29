@@ -28579,7 +28579,7 @@ function groupWrap(name, func) {
 }
 const installRustup = groupWrap("install toolchain", () => __awaiter(void 0, void 0, void 0, function* () {
     yield tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
-    yield (0, exec_1.exec)("bash", ["rustup.sh"]);
+    yield (0, exec_1.exec)("bash", ["rustup.sh", "-y"]);
     yield tc.cacheDir("~/.rustup", "rustup", "0");
 }));
 function run() {

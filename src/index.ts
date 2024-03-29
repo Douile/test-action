@@ -26,7 +26,7 @@ function groupWrap(
 
 const installRustup = groupWrap("install toolchain", async () => {
   await tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
-  await exec("bash", ["rustup.sh"]);
+  await exec("bash", ["rustup.sh", "-y"]);
   await tc.cacheDir("~/.rustup", "rustup", "0");
 });
 
