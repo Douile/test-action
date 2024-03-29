@@ -28568,15 +28568,23 @@ function groupWrap(name, func) {
 }
 const installRustup = groupWrap("install toolchain", async () => {
     await tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
+    const rustupVersion = await (0, exec_1.getExecOutput)("bash", ["rustup.sh", "--version"]);
     await (0, exec_1.exec)("bash", ["rustup.sh", "-y"]);
+    await tc.cacheDir("/home/runner/.rustup", "rustup", rustupVersion.stdout);
+});
+const installCross = groupWrap("install cross", async () => {
     await (0, exec_1.exec)("cargo", ["install", "cross"]);
-    await tc.cacheDir("/home/runner/.rustup", "rustup", "0");
-    await tc.cacheDir("/home/runner/.cargo", "cargo", "0");
+    const crossVersion = await (0, exec_1.getExecOutput)("cross", ["--version"]);
+    await tc.cacheDir("/home/runner/.cargo/bin", "cross", crossVersion.stdout);
+});
+const build = groupWrap("build", async () => {
+    await (0, exec_1.exec)("cross", ["build"]);
 });
 async function run() {
     await installRustup();
-    await (0, exec_1.exec)("docker", ["pull", image]);
-    await (0, exec_1.exec)("docker", ["run", "--rm", image]);
+    await installCross();
+    await (0, exec_1.exec)("cargo", ["init", "--bin", "--name", "example"]);
+    await build();
 }
 run().then(null, (error) => core.setFailed(error.message));
 
