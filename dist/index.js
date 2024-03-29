@@ -28557,7 +28557,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const exec_1 = __nccwpck_require__(1514);
 const tc = __importStar(__nccwpck_require__(7784));
-const image = 'ghcr.io/cross-rs/aarch64-unknown-linux-gnu:latest';
+const image = "ghcr.io/cross-rs/aarch64-unknown-linux-gnu:latest";
 /**
  * Wrap an async function in a actions group.
  * @param name Name of the actions group
@@ -28579,14 +28579,14 @@ function groupWrap(name, func) {
 }
 const installRustup = groupWrap("install toolchain", () => __awaiter(void 0, void 0, void 0, function* () {
     yield tc.downloadTool("https://sh.rustup.rs", "rustup.sh");
-    yield (0, exec_1.exec)('bash', ['rustup.sh']);
+    yield (0, exec_1.exec)("bash", ["rustup.sh"]);
     yield tc.cacheDir("~/.rustup", "rustup", "0");
 }));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         yield installRustup();
-        yield (0, exec_1.exec)('docker', ['pull', image]);
-        yield (0, exec_1.exec)('docker', ['run', '--rm', image]);
+        yield (0, exec_1.exec)("docker", ["pull", image]);
+        yield (0, exec_1.exec)("docker", ["run", "--rm", image]);
     });
 }
 run().then(null, (error) => core.setFailed(error.message));
